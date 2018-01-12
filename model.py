@@ -109,10 +109,12 @@ def nVidiaModel():
     model.add(Convolution2D(48,5,5, subsample=(2,2), activation='relu'))
     model.add(Convolution2D(64,3,3, activation='relu'))
     model.add(Convolution2D(64,3,3, activation='relu'))
+    model.add(Dropout(0.25))
     model.add(Flatten())
     model.add(Dense(100))
     model.add(Dense(50))
     model.add(Dense(10))
+    model.add(Dropout(0.25))
     model.add(Dense(1))
     return model
 
