@@ -20,27 +20,24 @@ def findImages(dataPath):
     Finds all the images needed for training on the path `dataPath`.
     Returns `([centerPaths], [leftPath], [rightPath], [measurement])`
     """
-    directories = [x[0] for x in os.walk(dataPath)]
-    dataDirectories = list(filter(lambda directory: os.path.isfile(directory + '/driving_log.csv'), directories))
     centerTotal = []
     leftTotal = []
     rightTotal = []
     measurementTotal = []
-    for directory in dataDirectories:
-        lines = getLinesFromDrivingLogs(directory)
-        center = []
-        left = []
-        right = []
-        measurements = []
-        for line in lines:
-            measurements.append(float(line[3]))
-            center.append(directory + '/IMG/' + line[0].split('\\')[-1])
-            left.append(directory + '/IMG/' + line[1].split('\\')[-1])
-            right.append(directory + '/IMG/' + line[2].split('\\')[-1])
-        centerTotal.extend(center)
-        leftTotal.extend(left)
-        rightTotal.extend(right)
-        measurementTotal.extend(measurements)
+    lines = getLinesFromDrivingLogs(dataPath)
+    center = []
+    left = []
+    right = []
+    measurements = []
+    for line in lines:
+        measurements.append(float(line[3]))
+        center.append(dataPath + '/IMG/' + line[0].split('\\')[-1])
+        left.append(dataPath + '/IMG/' + line[1].split('\\')[-1])
+        right.append(dataPath + '/IMG/' + line[2].split('\\')[-1])
+    centerTotal.extend(center)
+    leftTotal.extend(left)
+    rightTotal.extend(right)
+    measurementTotal.extend(measurements)
 
     return (centerTotal, leftTotal, rightTotal, measurementTotal)
 
@@ -147,6 +144,12 @@ model.save('model.h5')
 
 ### print the keys contained in the history object
 print(history_object.history.keys())
+
+import pickle
+
+
+with open('results.pickle', 'wb') as f:
+    pickle.dump(history_object.history, f)
 
 ### plot the training and validation loss for each epoch
 plt.plot(history_object.history['loss'])
