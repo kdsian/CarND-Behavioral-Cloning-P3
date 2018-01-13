@@ -85,7 +85,7 @@ def generator(samples, batch_size=32):
             yield sklearn.utils.shuffle(inputs, outputs)
 
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Cropping2D
+from keras.layers import Flatten, Dense, Lambda, Cropping2D,Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 import matplotlib.pyplot as plt
