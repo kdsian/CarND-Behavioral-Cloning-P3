@@ -4,36 +4,36 @@
 
 **Behavioral Cloning Project**
 
-The goals / steps of this project are the following:
-* Use the simulator to collect data of good driving behavior
-* Build, a convolution neural network in Keras that predicts steering angles from images
+본 프로젝트의 목표 및 수행한 step은 아래와 같습니다.:
+* Use the simulator to **collect data** of good driving behavior
+* Build, a convolution neural network in **Keras** that predicts steering angles from images
 * Train and validate the model with a training and validation set
-* Test that the model successfully drives around track one without leaving the road
+* Test that the model successfully **drives around track** one without leaving the road
 * Summarize the results with a written report
 
 ## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+프로젝트 구현 과정에서 아래 사항에 대해 고려하면서 작업을 수행했습니다. [rubric points](https://review.udacity.com/#!/rubrics/432/view)
+
+각각의 항목이 어떻게 구현되었는지는 아래 설명을 통해 보여드리겠습니다. 
 
 ---
 ## Files Submitted & Code Quality
 
 ### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
-My project includes the following files:
-* model.py containing the script to create and train the model
-* drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
-* writeup_report.md summarizing the results
+해당 프로젝트의 구성 파일은 아래와 같습니다.
+* model.py : containing the script to create and train the model
+* drive.py : for driving the car in autonomous mode
+* model.h5 : containing a trained convolution neural network 
+* writeup_report.md : summarizing the results
 
 ### 2. Submission includes functional code
-Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
+Udacity에서 제공하는 simulator를 통해 drive.py file을 실행하면 track을 자율 주행하는 것을 확인 할 수 있습니다.
+
+terminal 에 아래와 같이 작성하시고, 시뮬레이터에서 autonomous driving 모드로 진입하시면 됩니다. 
 ```sh
 python drive.py model.h5
 ```
-
-### 3. Submission code is usable and readable
-
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ## Model Architecture and Training Strategy
 
@@ -42,8 +42,6 @@ The model.py file contains the code for training and saving the convolution neur
 <center><img src="./examples/LeNet.png"></center>
 
 처음 적용한 모델은 기존 수업에 사용했었던 LeNet을 적용하여 수행했습니다.
-
-이후 수업에서 좀 더 powerful 한 모델로 nVidia 모델을 소개해서 해당 모델을 최종적으로 적용했습니다.
 
 ### 2. Attempts to reduce overfitting in the model
 
@@ -57,11 +55,16 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 ### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road.
+처음 모델을 학습하고 수행할 때에는 최대한 track의 정중앙으로 운행한 1-lap의 데이터를 이용했습니다.
+
+하지만, 자율주행 모드에서 한번 track을 벗어날 경우 다시 복귀하는 동작이 불가능한 것을 깨닫고
+
+임의로 학습 데이터에 track을 벗어났다고 복귀하는 운행을 추가하였습니다.
 
 그리고 추가적으로 역주행으로 1 lap을 데이터에 추가하였습니다.
 
-For details about how I created the training data, see the next section. 
+학습 데이터에 대한 좀 더 자세한 내용은 마지막 부분에 정리에서 한번에 보여 드리겠습니다.
+
 
 ## Model Architecture and Training Strategy
 
@@ -69,13 +72,10 @@ For details about how I created the training data, see the next section.
 
 LeNet 모델을 적용한 이후에 실제로 시뮬레이터를 통해 AD 주행을 하였을 때, 자동차의 운행이 매끄럽게 진행되지 않음을 확인했습니다.
 
-그래서 수정 중에 소개된 새로운 모델을 적용해보았습니다.
+그래서 수업에서 소개된 소개된 새로운 모델을 적용했고,
 
-다만, 한번 지정된 도로를 벗어나면 되돌아 오지 못하고 그대로 retire 하는 문제가 발생하였습니다.
+그 결과 기존 대비 track을 벗어나는 횟수가 줄어드는 것을 확인했습니다.
 
-이를 방지하기 위해 일부러 training data set에 line을 나갔다가 돌아오는 모습을 일부 추가하였습니다.
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 ### 2. Final Model Architecture
 
@@ -108,7 +108,8 @@ The final model architecture (model.py lines 102-119) consisted of a convolution
 | Dropout           | 0.25                                          |
 | Fully connected   | input 10, output 1                            |
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+architecture의 도식화된 그림은 아래와 같습니다.
+(note: visualizing the architecture is optional according to the project rubric)
 
 <center><img src="./examples/nVidia_model.png"></center>
 
@@ -128,7 +129,7 @@ I then recorded the vehicle recovering from the left side and right sides of the
 <center><img src="./examples/recovery2.jpg"></center>
 <center><img src="./examples/recovery3.jpg"></center>
 
-To augment the data sat, I also flipped images. 기본적으로 lap의 데이터로만 구성할 경우 generlize 되지 않을 거라 판단되어 flip 된 image을 추가하였습니다. 
+또한, 데이터 셋에 augment 를 위해 좌우로 flip 작업을 추가하였습니다. 
 
 After the collection process, I had 10108 number of data points. I then preprocessed this data. 중요한 부분만 보기 위해 Cropping2D 로 일부 데이터를 잘랐습니다.
 
