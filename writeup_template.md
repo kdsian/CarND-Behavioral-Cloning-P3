@@ -135,7 +135,7 @@ After the collection process, I had 10108 number of data points. I then preproce
 
 해당 기능을 두번째 preprocessing인 normalization 전에 수행한 이유는 udacity review의 comment와 같이 불필요한 부분은 미리 버려 연산량을 줄위기 위해 제일 먼저 수행하였습니다.
 
-<center><img src="./examples/crop_results.jpg"></center>
+<center><img src="./examples/crop_results.png"></center>
 
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
