@@ -59,7 +59,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 하지만, 자율주행 모드에서 한번 track을 벗어날 경우 다시 복귀하는 동작이 불가능한 것을 깨닫고
 
-임의로 학습 데이터에 track을 벗어났다고 복귀하는 운행을 추가하였습니다.
+임의로 학습 데이터에 track을 벗어났다가 복귀하는 운행을 추가하였습니다.
 
 그리고 추가적으로 역주행으로 1 lap을 데이터에 추가하였습니다.
 
@@ -133,9 +133,14 @@ I then recorded the vehicle recovering from the left side and right sides of the
 
 After the collection process, I had 10108 number of data points. I then preprocessed this data. 중요한 부분만 보기 위해 Cropping2D 로 일부 데이터를 잘랐습니다.
 
+해당 기능을 두번째 preprocessing인 normalization 전에 수행한 이유는 udacity review의 comment와 같이 불필요한 부분은 미리 버려 연산량을 줄위기 위해 제일 먼저 수행하였습니다.
+
+<center><img src="./examples/crop_results.jpg"></center>
+
+
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 2. 여러번 수행을 통해 얻어냈습니다.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 2. 
 
  I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
